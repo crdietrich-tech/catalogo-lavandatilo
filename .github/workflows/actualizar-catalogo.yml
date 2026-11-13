@@ -1,0 +1,29 @@
+name: Actualizar catálogo desde la tienda
+# Cada 3 horas relee precios, stock, fotos y productos de lavandatilo.com.ar
+# y, si algo cambió, actualiza productos.json (el sitio se republica solo).
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: actualizar-catalogo
+  cancel-in-progress: false
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Leer la tienda y generar productos.json
+        run: python3 scripts/actualizar.py
+      - name: Guardar cambios
+        run: |
+          if git diff --quiet -- productos.json; then echo "Sin cambios."; exit 0; fi
+          git config user.name "catalogo-bot"
+          git config user.email "catalogo-bot@users.noreply.github.com"
+          git add productos.json
+          git commit -m "Catálogo actualizado $(TZ=America/Argentina/Buenos_Aires date '+%d/%m/%Y %H:%M')"
+          git push

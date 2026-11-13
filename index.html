@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo · Lavanda &amp; Tilo</title>
+<meta name="description" content="Catálogo online de Lavanda & Tilo — deco, bazar, textil y baño. Precios y stock actualizados.">
+<meta property="og:title" content="Catálogo · Lavanda & Tilo">
+<meta property="og:description" content="Deco, bazar, textil y baño. Precios y stock actualizados.">
+<meta property="og:image" content="https://lavandatilo.com.ar/wp-content/uploads/2023/10/cropped-ISO-02-270x270.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="https://lavandatilo.com.ar/wp-content/uploads/2023/10/cropped-ISO-02-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<!-- CONFIGURACIÓN: número de WhatsApp de la tienda (solo dígitos, ej. 5492994123456). Vacío = no se muestra "Consultar por WhatsApp" -->
+<script>window.CONFIG = { whatsapp: "", tienda: "https://lavandatilo.com.ar" };</script>
+<style>
+  :root{
+    --bg:#fff; --ink:#212121; --soft:#6b6460; --line:#ece6e3; --rosa:#FED1FF; --rosa2:#fbeefc;
+    --tierra:#B26B53; --verde:#1f9d55; --gris:#f6f3f1; --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:Jost,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-weight:400;line-height:1.45}
+  img{display:block;max-width:100%}
+  button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+  a{color:inherit}
+
+  header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+  .logo{height:38px;width:auto}
+  .logo-txt{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;letter-spacing:.5px;display:none}
+  .bar .tienda{margin-left:auto;font-size:13px;text-decoration:none;border:1px solid var(--ink);padding:7px 12px;white-space:nowrap}
+  .bar .tienda:hover{background:var(--ink);color:#fff}
+
+  .hero{background:linear-gradient(180deg,var(--rosa2),#fff);padding:28px 16px 18px;text-align:center}
+  .hero h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(30px,6vw,46px);line-height:1.05}
+  .hero h1 em{color:var(--tierra)}
+  .hero p{color:var(--soft);font-size:14px;margin-top:6px}
+
+  .controls{max-width:1200px;margin:0 auto;padding:12px 16px 4px;position:sticky;top:59px;z-index:15;background:#fff}
+  .search{display:flex;align-items:center;gap:8px;background:var(--gris);border-radius:999px;padding:0 14px;height:44px}
+  .search svg{flex:none;opacity:.55}
+  .search input{flex:1;border:0;background:none;font:inherit;font-size:16px;outline:none;min-width:0}
+  .search .x{opacity:.5;font-size:20px;line-height:1;padding:4px;display:none}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;letter-spacing:.3px;white-space:nowrap;background:#fff}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip small{opacity:.6;margin-left:4px}
+  .subchips .chip{font-size:12px;padding:5px 11px;background:var(--gris);border-color:transparent}
+  .subchips .chip[aria-pressed="true"]{background:var(--rosa);color:var(--ink)}
+  .row2{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0 8px;font-size:13px;color:var(--soft)}
+  .toggle{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+  .sw{width:36px;height:20px;border-radius:20px;background:#d8d2cf;position:relative;transition:.2s}
+  .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  input:checked + .sw{background:var(--ink)}
+  input:checked + .sw::after{left:18px}
+  .toggle input{display:none}
+  select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff;color:var(--ink)}
+
+  main{max-width:1200px;margin:0 auto;padding:6px 16px 40px}
+  .count{font-size:13px;color:var(--soft);margin:2px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 12px}
+  @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:24px 18px}}
+  @media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .card{text-align:left;display:flex;flex-direction:column;gap:8px;position:relative}
+  .ph{position:relative;aspect-ratio:3/4;background:var(--gris);border-radius:var(--r);overflow:hidden}
+  .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .card:hover .ph img{transform:scale(1.04)}
+  .badge{position:absolute;top:8px;left:8px;font-size:11px;letter-spacing:.4px;padding:4px 8px;border-radius:999px;background:#fff;font-weight:500}
+  .badge.sin{background:rgba(33,33,33,.82);color:#fff}
+  .badge.of{background:var(--tierra);color:#fff}
+  .card.agotado .ph img{filter:grayscale(.6);opacity:.7}
+  .nm{font-size:14px;line-height:1.3;font-weight:400}
+  .pz{font-size:15px;font-weight:600}
+  .pz s{font-weight:400;color:var(--soft);font-size:13px;margin-right:6px}
+  .var{font-size:12px;color:var(--soft)}
+  .empty{text-align:center;padding:60px 10px;color:var(--soft)}
+
+  /* Detalle */
+  .modal{position:fixed;inset:0;z-index:50;background:rgba(20,16,15,.5);display:none;align-items:flex-end;justify-content:center}
+  .modal.open{display:flex}
+  .sheet{background:#fff;width:100%;max-width:980px;max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;position:relative;animation:up .25s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+  @media(min-width:800px){.modal{align-items:center}.sheet{border-radius:20px;display:grid;grid-template-columns:1.05fr 1fr}}
+  .close{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);font-size:22px;line-height:38px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+  .gal{position:relative;background:var(--gris)}
+  .slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:3/4}
+  .slides::-webkit-scrollbar{display:none}
+  .slides img{flex:none;width:100%;height:100%;object-fit:cover;scroll-snap-align:center}
+  @media(min-width:800px){.gal{border-radius:20px 0 0 20px;overflow:hidden}.slides{height:100%;max-height:94vh}}
+  .dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6)}
+  .dots i.on{background:#fff}
+  .info{padding:20px 20px 28px;display:flex;flex-direction:column;gap:14px}
+  .info .cats{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tierra)}
+  .info h2{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:30px;line-height:1.08}
+  .info .pz{font-size:22px}
+  .stk{font-size:13px;display:inline-flex;align-items:center;gap:6px}
+  .stk::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--verde)}
+  .stk.no::before{background:#c0392b}
+  .attr h4{font-size:12px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
+  .attr .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .attr .opts span{font-size:13px;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  .desc{font-size:14px;color:#3d3734;white-space:pre-line}
+  .btns{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;font-size:14px;letter-spacing:.4px;text-decoration:none;border:1px solid var(--ink)}
+  .btn.main{background:var(--rosa);border-color:var(--rosa);color:#000;font-weight:500}
+  .btn.wa{background:#25D366;border-color:#25D366;color:#fff;font-weight:500}
+  .btn.sec{background:#fff}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;z-index:60;opacity:0;transition:.25s;pointer-events:none}
+  .toast.on{opacity:1}
+
+  footer{border-top:1px solid var(--line);padding:22px 16px 34px;text-align:center;font-size:12px;color:var(--soft);line-height:1.7}
+  footer a{color:var(--tierra)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <a href="#" id="home" aria-label="Inicio del catálogo">
+      <img class="logo" src="https://lavandatilo.com.ar/wp-content/uploads/2023/10/cropped-LOGO.png" alt="Lavanda &amp; Tilo" onerror="this.style.display='none';document.querySelector('.logo-txt').style.display='block'">
+    </a>
+    <span class="logo-txt">Lavanda &amp; Tilo</span>
+    <a class="tienda" href="https://lavandatilo.com.ar/shop/" target="_blank" rel="noopener">Ir a la tienda</a>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Catálogo <em>Lavanda &amp; Tilo</em></h1>
+  <p id="sub">Deco · Bazar · Textil · Baño</p>
+</section>
+
+<div class="controls">
+  <label class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Buscar productos…" autocomplete="off" enterkeyhint="search">
+    <button class="x" id="qx" aria-label="Borrar búsqueda">×</button>
+  </label>
+  <div class="chips" id="cats" role="toolbar" aria-label="Categorías"></div>
+  <div class="chips subchips" id="subs" role="toolbar" aria-label="Subcategorías" hidden></div>
+  <div class="row2">
+    <label class="toggle"><input type="checkbox" id="soloStock" checked><span class="sw"></span>Solo disponibles</label>
+    <select id="orden" aria-label="Ordenar">
+      <option value="rel">Destacados</option>
+      <option value="asc">Menor precio</option>
+      <option value="desc">Mayor precio</option>
+      <option value="az">A – Z</option>
+    </select>
+  </div>
+</div>
+
+<main>
+  <p class="count" id="count">Cargando catálogo…</p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div id="upd"></div>
+  <div>Precios en pesos argentinos, sujetos a cambios y a disponibilidad de stock.</div>
+  <div><a href="https://lavandatilo.com.ar" target="_blank" rel="noopener">lavandatilo.com.ar</a></div>
+</footer>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <button class="close" id="mclose" aria-label="Cerrar">×</button>
+    <div class="gal"><div class="slides" id="slides"></div><div class="dots" id="dots"></div></div>
+    <div class="info" id="minfo"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const fmt = n => "$" + Number(n).toLocaleString("es-AR");
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  const ORDEN_CATS = ["DECO","BAZAR","TEXTIL","BAÑO","BEAUTY","LAVANDA&TILO DESIGN","ACCESORIOS MODA","DECO INFANTIL","OTROS"];
+  const NOMBRE_CAT = c => c==="LAVANDA&TILO DESIGN" ? "L&T Design" : c==="OTROS" ? "Otros" : c.charAt(0)+c.slice(1).toLowerCase();
+  let P = [], byId = {}, st = {cat:"TODOS", sub:null, q:"", solo:true, orden:"rel"};
+
+  function precio(p){
+    if (p.min != null && p.max != null && p.min !== p.max) return fmt(p.min) + " – " + fmt(p.max);
+    if (p.oferta && p.pr > p.p) return "<s>"+fmt(p.pr)+"</s>"+fmt(p.p);
+    return fmt(p.p);
+  }
+  function precioTxt(p){
+    return (p.min != null && p.max != null && p.min !== p.max) ? fmt(p.min)+" a "+fmt(p.max) : fmt(p.p);
+  }
+  function catalogUrl(){ return location.href.split("#")[0]; }
+
+  function filtrados(){
+    const q = norm(st.q).split(/\s+/).filter(Boolean);
+    let r = P.filter(p =>
+      (st.cat==="TODOS" || p.cat.includes(st.cat)) &&
+      (!st.sub || p.sub.includes(st.sub)) &&
+      (!st.solo || p.stock) &&
+      (!q.length || q.every(w => p._s.includes(w))));
+    const val = p => p.min ?? p.p;
+    if (st.orden==="asc") r.sort((a,b)=>val(a)-val(b));
+    else if (st.orden==="desc") r.sort((a,b)=>val(b)-val(a));
+    else if (st.orden==="az") r.sort((a,b)=>a.n.localeCompare(b.n,"es"));
+    return r;
+  }
+
+  function renderCats(){
+    const base = P.filter(p => !st.solo || p.stock);
+    const cnt = {}; base.forEach(p => p.cat.forEach(c => cnt[c]=(cnt[c]||0)+1));
+    const cats = ORDEN_CATS.filter(c => cnt[c]);
+    $("#cats").innerHTML = [["TODOS","Todo",base.length], ...cats.map(c=>[c,NOMBRE_CAT(c),cnt[c]])]
+      .map(([k,l,n]) => `<button class="chip" data-c="${esc(k)}" aria-pressed="${st.cat===k}">${esc(l)}<small>${n}</small></button>`).join("");
+    const subsEl = $("#subs");
+    if (st.cat==="TODOS"){ subsEl.hidden = true; subsEl.innerHTML=""; return; }
+    const sc = {}; base.filter(p=>p.cat.includes(st.cat)).forEach(p => p.sub.forEach(s => sc[s]=(sc[s]||0)+1));
+    const subs = Object.keys(sc).sort((a,b)=>sc[b]-sc[a]);
+    if (subs.length < 2){ subsEl.hidden = true; subsEl.innerHTML=""; return; }
+    subsEl.hidden = false;
+    subsEl.innerHTML = subs.map(s => `<button class="chip" data-s="${esc(s)}" aria-pressed="${st.sub===s}">${esc(s.charAt(0).toUpperCase()+s.slice(1))}<small>${sc[s]}</small></button>`).join("");
+  }
+
+  function render(){
+    renderCats();
+    const r = filtrados();
+    $("#count").textContent = r.length + (r.length===1 ? " producto" : " productos");
+    $("#grid").innerHTML = r.length ? r.map(p => {
+      const im = p.img[0];
+      const vars = p.a.length ? p.a.map(a => a.v.length + " opciones de " + a.n.toLowerCase()).join(" · ") : "";
+      return `<button class="card${p.stock?"":" agotado"}" data-id="${p.id}">
+        <div class="ph">${im ? `<img loading="lazy" decoding="async" src="${esc(im.t)}" alt="${esc(p.n)}" onerror="this.src='${esc(im.g)}';this.onerror=null">` : ""}
+          ${!p.stock ? '<span class="badge sin">Sin stock</span>' : (p.oferta ? '<span class="badge of">Oferta</span>' : "")}</div>
+        <div class="nm">${esc(p.n)}</div>
+        <div class="pz">${precio(p)}</div>
+        ${vars ? `<div class="var">${esc(vars)}</div>` : ""}
+      </button>`;
+    }).join("") : `<div class="empty" style="grid-column:1/-1">No encontramos productos con esos filtros.</div>`;
+  }
+
+  function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1800); }
+
+  function abrir(id, push=true){
+    const p = byId[id]; if (!p) return;
+    const imgs = p.img.length ? p.img : [];
+    $("#slides").innerHTML = imgs.map(i => `<img src="${esc(i.g)}" alt="${esc(p.n)}" loading="lazy">`).join("");
+    $("#dots").innerHTML = imgs.length > 1 ? imgs.map((_,i)=>`<i class="${i?"":"on"}"></i>`).join("") : "";
+    $("#slides").scrollLeft = 0;
+    const link = catalogUrl() + "#p-" + p.id;
+    const waTxt = encodeURIComponent(`${p.n} — ${precioTxt(p)}\n${link}`);
+    const consulta = encodeURIComponent(`Hola! Quería consultar por: ${p.n} (${precioTxt(p)})\n${link}`);
+    const cats = [...p.cat.filter(c=>c!=="OTROS").map(NOMBRE_CAT), ...p.sub].join(" · ");
+    $("#minfo").innerHTML = `
+      ${cats ? `<div class="cats">${esc(cats)}</div>` : ""}
+      <h2 id="mt">${esc(p.n)}</h2>
+      <div class="pz">${precio(p)}</div>
+      <div class="stk${p.stock?"":" no"}">${p.stock ? esc(p.st || "Disponible") : "Sin stock por el momento"}</div>
+      ${p.a.map(a => `<div class="attr"><h4>${esc(a.n)}</h4><div class="opts">${a.v.map(v=>`<span>${esc(v)}</span>`).join("")}</div></div>`).join("")}
+      ${p.d ? `<div class="desc">${esc(p.d)}</div>` : ""}
+      ${p.dl && p.dl !== p.d ? `<div class="desc">${esc(p.dl)}</div>` : ""}
+      ${p.dim ? `<div class="desc">Medidas: ${esc(p.dim)}</div>` : ""}
+      <div class="btns">
+        <a class="btn main" href="${esc(p.u)}" target="_blank" rel="noopener">${p.stock ? "Comprar en la tienda" : "Ver en la tienda"}</a>
+        ${window.CONFIG.whatsapp ? `<a class="btn wa" href="https://wa.me/${window.CONFIG.whatsapp}?text=${consulta}" target="_blank" rel="noopener">Consultar por WhatsApp</a>` : ""}
+        <a class="btn sec" href="https://wa.me/?text=${waTxt}" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+        <button class="btn sec" id="copy">Copiar link del producto</button>
+      </div>`;
+    $("#copy").onclick = async () => { try { await navigator.clipboard.writeText(link); toast("Link copiado"); } catch(e){ toast(link); } };
+    $("#modal").classList.add("open"); $("#modal").setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+    if (push && location.hash !== "#p-"+p.id) history.pushState(null, "", "#p-"+p.id);
+  }
+  function cerrar(push=true){
+    $("#modal").classList.remove("open"); $("#modal").setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+    if (push && location.hash.startsWith("#p-")) history.pushState(null, "", location.pathname + location.search);
+  }
+  function porHash(){
+    const m = location.hash.match(/^#p-(\d+)/);
+    if (m && byId[m[1]]) abrir(m[1], false); else cerrar(false);
+  }
+
+  $("#grid").addEventListener("click", e => { const c = e.target.closest(".card"); if (c) abrir(c.dataset.id); });
+  $("#cats").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; st.cat = b.dataset.c; st.sub = null; render(); });
+  $("#subs").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; st.sub = st.sub===b.dataset.s ? null : b.dataset.s; render(); });
+  let t; $("#q").addEventListener("input", e => { st.q = e.target.value; $("#qx").style.display = st.q ? "block" : "none"; clearTimeout(t); t = setTimeout(render, 120); });
+  $("#qx").addEventListener("click", () => { $("#q").value = ""; st.q = ""; $("#qx").style.display="none"; render(); });
+  $("#soloStock").addEventListener("change", e => { st.solo = e.target.checked; render(); });
+  $("#orden").addEventListener("change", e => { st.orden = e.target.value; render(); });
+  $("#mclose").addEventListener("click", () => cerrar());
+  $("#modal").addEventListener("click", e => { if (e.target.id === "modal") cerrar(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") cerrar(); });
+  $("#home").addEventListener("click", e => { e.preventDefault(); cerrar(); window.scrollTo({top:0,behavior:"smooth"}); });
+  $("#slides").addEventListener("scroll", e => {
+    const i = Math.round(e.target.scrollLeft / e.target.clientWidth);
+    document.querySelectorAll("#dots i").forEach((d,k)=>d.classList.toggle("on", k===i));
+  }, {passive:true});
+  window.addEventListener("popstate", porHash);
+
+  fetch("productos.json?v=" + Date.now(), {cache:"no-store"}).then(r => r.json()).then(d => {
+    P = d.productos;
+    P.forEach(p => { byId[p.id] = p; p._s = norm([p.n, p.sub.join(" "), p.cat.join(" "), p.a.map(a=>a.v.join(" ")).join(" "), p.d].join(" ")); });
+    const n = P.filter(p=>p.stock).length;
+    $("#sub").textContent = `${n} productos disponibles · Deco · Bazar · Textil · Baño`;
+    $("#upd").textContent = "Precios y stock actualizados el " + d.actualizado + " hs.";
+    render(); porHash();
+  }).catch(() => { $("#count").textContent = "No se pudo cargar el catálogo. Probá recargar la página."; });
+})();
+</script>
+</body>
+</html>
