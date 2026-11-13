@@ -123,6 +123,27 @@
   .ig b{font-weight:600}
   footer{padding-bottom:84px}
   .toast{bottom:84px}
+  /* Últimos ingresos */
+  .nuevos{margin:4px 0 26px;border-radius:18px;padding:16px 0 18px;position:relative;overflow:hidden;
+    background:linear-gradient(120deg,#2b1d1a,#5a2f3f 55%,#B26B53)}
+  .nuevos::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 10%,rgba(254,209,255,.45),transparent 45%)}
+  .nv-head{position:relative;display:flex;align-items:center;gap:10px;padding:0 16px 12px;color:#fff}
+  .nv-head h2{font-family:Jost,sans-serif;font-weight:700;font-size:clamp(22px,6vw,32px);letter-spacing:.5px;text-transform:uppercase;line-height:1;
+    background:linear-gradient(90deg,#fff,#FED1FF,#ffd36b,#fff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:brillo 3.5s linear infinite}
+  @keyframes brillo{to{background-position:-250% 0}}
+  .nv-head .fuego{font-size:26px;animation:late 1.2s ease-in-out infinite}
+  @keyframes late{50%{transform:scale(1.25) rotate(-8deg)}}
+  .nv-head small{margin-left:auto;font-size:12px;opacity:.8;white-space:nowrap}
+  .nv-row{position:relative;display:flex;gap:12px;overflow-x:auto;padding:0 16px;scroll-padding-inline:16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .nv-row::-webkit-scrollbar{display:none}
+  .nv-row .card{flex:none;width:44%;max-width:210px;scroll-snap-align:start;color:#fff}
+  .nv-row .card .var{color:rgba(255,255,255,.75)}
+  .badge.nuevo{background:#ffd36b;color:#2b1d1a;font-weight:700;letter-spacing:.8px;animation:pulso 1.6s ease-in-out infinite}
+  @keyframes pulso{50%{transform:scale(1.08);box-shadow:0 0 0 4px rgba(255,211,107,.35)}}
+  .ver-nuevos{position:relative;display:block;margin:14px 16px 0;height:42px;border-radius:999px;background:#FED1FF;color:#2b1d1a;font-weight:600;font-size:14px;width:calc(100% - 32px)}
+  .titulo-grid{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;margin:0 0 6px}
+  @media (prefers-reduced-motion:reduce){.nv-head h2,.nv-head .fuego,.badge.nuevo{animation:none}}
 </style>
 </head>
 <body>
@@ -152,6 +173,7 @@
   <div class="row2">
     <label class="toggle"><input type="checkbox" id="soloStock" checked><span class="sw"></span>Solo disponibles</label>
     <select id="orden" aria-label="Ordenar">
+      <option value="nuevos">Últimos ingresos</option>
       <option value="rel">Destacados</option>
       <option value="asc">Menor precio</option>
       <option value="desc">Mayor precio</option>
@@ -161,6 +183,12 @@
 </div>
 
 <main>
+  <section class="nuevos" id="nuevos" hidden>
+    <div class="nv-head"><span class="fuego">🔥</span><h2>¡Últimos Ingresos!!!</h2><small>Deslizá →</small></div>
+    <div class="nv-row" id="nvrow"></div>
+    <button class="ver-nuevos" id="vernuevos">Ver todos los nuevos</button>
+  </section>
+  <h2 class="titulo-grid" id="tgrid" hidden>Todo el catálogo</h2>
   <p class="count" id="count">Cargando catálogo…</p>
   <div class="grid" id="grid"></div>
 </main>
@@ -192,7 +220,7 @@
   const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
   const ORDEN_CATS = ["DECO","BAZAR","TEXTIL","BAÑO","BEAUTY","LAVANDA&TILO DESIGN","ACCESORIOS MODA","DECO INFANTIL","OTROS"];
   const NOMBRE_CAT = c => c==="LAVANDA&TILO DESIGN" ? "L&T Design" : c==="OTROS" ? "Otros" : c.charAt(0)+c.slice(1).toLowerCase();
-  let P = [], byId = {}, st = {cat:"TODOS", sub:null, q:"", solo:true, orden:"rel"};
+  let P = [], byId = {}, st = {cat:"TODOS", sub:null, q:"", solo:true, orden:"nuevos"}, NUEVOS = 12, nuevosSet = new Set();
 
   function precio(p){
     if (p.min != null && p.max != null && p.min !== p.max) return fmt(p.min) + " – " + fmt(p.max);
@@ -212,7 +240,8 @@
       (!st.solo || p.stock) &&
       (!q.length || q.every(w => p._s.includes(w))));
     const val = p => p.min ?? p.p;
-    if (st.orden==="asc") r.sort((a,b)=>val(a)-val(b));
+    if (st.orden==="nuevos") r.sort((a,b)=>a.rk-b.rk);
+    else if (st.orden==="asc") r.sort((a,b)=>val(a)-val(b));
     else if (st.orden==="desc") r.sort((a,b)=>val(b)-val(a));
     else if (st.orden==="az") r.sort((a,b)=>a.n.localeCompare(b.n,"es"));
     return r;
@@ -237,18 +266,24 @@
     renderCats();
     const r = filtrados();
     $("#count").textContent = r.length + (r.length===1 ? " producto" : " productos");
-    $("#grid").innerHTML = r.length ? r.map(p => {
+    const sinFiltro = st.cat==="TODOS" && !st.sub && !st.q;
+    const nv = P.filter(p => p.stock && nuevosSet.has(p.id)).sort((a,b)=>a.rk-b.rk);
+    $("#nuevos").hidden = !(sinFiltro && nv.length);
+    $("#tgrid").hidden = !sinFiltro;
+    if (sinFiltro) $("#nvrow").innerHTML = nv.map(tarjeta).join("");
+    $("#grid").innerHTML = r.length ? r.map(tarjeta).join("") : `<div class="empty" style="grid-column:1/-1">No encontramos productos con esos filtros.</div>`;
+  }
+  function tarjeta(p){ {
       const im = p.img[0];
       const vars = p.a.length ? p.a.map(a => a.v.length + " opciones de " + a.n.toLowerCase()).join(" · ") : "";
       return `<button class="card${p.stock?"":" agotado"}" data-id="${p.id}">
         <div class="ph">${im ? `<img loading="lazy" decoding="async" src="${esc(im.t)}" alt="${esc(p.n)}" onerror="this.src='${esc(im.g)}';this.onerror=null">` : ""}
-          ${!p.stock ? '<span class="badge sin">Sin stock</span>' : (p.oferta ? '<span class="badge of">Oferta</span>' : "")}</div>
+          ${!p.stock ? '<span class="badge sin">Sin stock</span>' : nuevosSet.has(p.id) ? '<span class="badge nuevo">NUEVO</span>' : (p.oferta ? '<span class="badge of">Oferta</span>' : "")}</div>
         <div class="nm">${esc(p.n)}</div>
         <div class="pz">${precio(p)}</div>
         ${vars ? `<div class="var">${esc(vars)}</div>` : ""}
       </button>`;
-    }).join("") : `<div class="empty" style="grid-column:1/-1">No encontramos productos con esos filtros.</div>`;
-  }
+  } }
 
   function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1800); }
 
@@ -292,6 +327,8 @@
     if (m && byId[m[1]]) abrir(m[1], false); else cerrar(false);
   }
 
+  $("#nvrow").addEventListener("click", e => { const c = e.target.closest(".card"); if (c) abrir(c.dataset.id); });
+  $("#vernuevos").addEventListener("click", () => { st.orden="nuevos"; $("#orden").value="nuevos"; $("#tgrid").scrollIntoView({behavior:"smooth"}); render(); });
   $("#grid").addEventListener("click", e => { const c = e.target.closest(".card"); if (c) abrir(c.dataset.id); });
   $("#cats").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; st.cat = b.dataset.c; st.sub = null; render(); });
   $("#subs").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; st.sub = st.sub===b.dataset.s ? null : b.dataset.s; render(); });
@@ -312,6 +349,8 @@
   fetch("productos.json?v=" + Date.now(), {cache:"no-store"}).then(r => r.json()).then(d => {
     P = d.productos;
     P.forEach(p => { byId[p.id] = p; p._s = norm([p.n, p.sub.join(" "), p.cat.join(" "), p.a.map(a=>a.v.join(" ")).join(" "), p.d].join(" ")); });
+    if (P.some(p => p.rk == null)) P.forEach((p,i) => p.rk = -p.id);
+    P.slice().sort((a,b)=>a.rk-b.rk).filter(p=>p.stock).slice(0,NUEVOS).forEach(p => nuevosSet.add(p.id));
     const n = P.filter(p=>p.stock).length;
     $("#sub").textContent = `${n} productos disponibles · Deco · Bazar · Textil · Baño`;
     $("#upd").textContent = "Precios y stock actualizados el " + d.actualizado + " hs.";

@@ -7,7 +7,7 @@ Si la descarga falla o trae muy pocos productos, NO pisa el productos.json exist
 import json, sys, re, html, time, urllib.request, datetime, os
 
 TIENDA = "https://lavandatilo.com.ar"
-API = TIENDA + "/wp-json/wc/store/v1/products?per_page=100&page={}"
+API = TIENDA + "/wp-json/wc/store/v1/products?per_page=100&orderby=date&order=desc&page={}"
 SALIDA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "productos.json")
 # Categorías principales (las de la tienda en mayúsculas), en el orden del menú
 PRINCIPALES = ["DECO", "BAZAR", "TEXTIL", "BAÑO", "BEAUTY", "LAVANDA&TILO DESIGN", "ACCESORIOS MODA", "DECO INFANTIL"]
@@ -48,13 +48,14 @@ def img(i):
 
 def transformar(raw):
     out = []
-    for p in raw:
+    for rk, p in enumerate(raw):  # la tienda los entrega del más nuevo al más viejo
         pr = p["prices"]
         cats = [html.unescape(c["name"]) for c in p.get("categories", [])]
         principal = [c for c in cats if c.upper() in PRINCIPALES]
         rango = pr.get("price_range")
         out.append({
             "id": p["id"],
+            "rk": rk,
             "n": html.unescape(p["name"]),
             "u": p["permalink"],
             "p": int(pr["price"] or 0),
